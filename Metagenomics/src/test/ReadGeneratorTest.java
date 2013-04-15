@@ -5,9 +5,11 @@ package test;
 
 import static org.mockito.Mockito.mock;
 import java.io.File;
+
+import metagenomics.ReadGenerator;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
-import MG.ReadGenerator;
 
 /**
  * @author Nixie
