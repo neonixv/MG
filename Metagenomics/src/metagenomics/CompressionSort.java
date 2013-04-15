@@ -21,9 +21,10 @@ public class CompressionSort {
 		for(int i = 0; i < clusterDirs.length; i++){
 			//create directory for each cluster, allocate stuff accordingly.
 			clusterDirs[i] = new File(outputDir + "/" + "cluster" + i);
-			if(!clusterDirs[i].exists()){
-				clusterDirs[i].mkdir();
+			if(clusterDirs[i].exists()){
+				clusterDirs[i].delete();
 			}
+			clusterDirs[i].mkdir();
 		}
 		init();
 	}

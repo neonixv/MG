@@ -43,6 +43,7 @@ public class ReadGenerator {
 			numFiles -= nReads;
 		}
 //		System.out.println(Arrays.toString(numRuns));
+		int ithOutput = 0;
 		for (int i = 0; i < inputFiles.length; i++) {
 			Scanner sc = null;
 			PrintWriter pw = null;
@@ -59,7 +60,7 @@ public class ReadGenerator {
 			String seq = sb.toString();
 			sc.close();
 			for (int j = 0; j < numRuns[i]; j++) {
-				File outputFile = new File(outputDir + "/" + outputPrefix + j
+				File outputFile = new File(outputDir + "/" + outputPrefix + ithOutput
 						+ ".txt");
 				if (outputFile.exists())
 					outputFile.delete();
@@ -73,6 +74,7 @@ public class ReadGenerator {
 				}
 				finally{
 					pw.close();
+					ithOutput++;
 				}
 
 			}
