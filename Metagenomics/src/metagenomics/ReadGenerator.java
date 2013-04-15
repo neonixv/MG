@@ -42,7 +42,7 @@ public class ReadGenerator {
 			numRuns[pos] += nReads;
 			numFiles -= nReads;
 		}
-		System.out.println(Arrays.toString(numRuns));
+//		System.out.println(Arrays.toString(numRuns));
 		for (int i = 0; i < inputFiles.length; i++) {
 			Scanner sc = null;
 			PrintWriter pw = null;
@@ -101,6 +101,7 @@ public class ReadGenerator {
 			inputFiles[i] = inputFile;
 		}
 		(new ReadGenerator(args[0], args[1], inputFiles)).run(20, 100);
+		System.out.println("Done generating reads.");
 
 	}
 
