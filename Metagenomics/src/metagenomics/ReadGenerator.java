@@ -16,8 +16,10 @@ public class ReadGenerator {
 	public ReadGenerator(String outputDir, String outputPrefix,
 			File[] inputFiles) {
 		this.outputDir = new File(outputDir);
-		if(this.outputDir.exists())
+		if(this.outputDir.exists()){
+			CompressionSort.recursiveDelete(this.outputDir);
 			this.outputDir.delete();
+		}
 		this.outputDir.mkdir();
 		this.outputPrefix = outputPrefix;
 		this.inputFiles = inputFiles;
@@ -77,6 +79,7 @@ public class ReadGenerator {
 		// half the runs to be distributed uniformly.
 		int[] numRuns = new int[inputFiles.length];
 		System.out.println(numFiles);
+		/*
 		Arrays.fill(numRuns, numFiles / (2*inputFiles.length));
 		numFiles -= numRuns[0] * numRuns.length;
 		while (numFiles > 0) {
@@ -84,6 +87,16 @@ public class ReadGenerator {
 			int nReads = (int)(Math.random() * numFiles) + 1;
 			numRuns[pos] += nReads;
 			numFiles -= nReads;
+		}
+		*/
+
+		Arrays.fill(numRuns, numFiles / inputFiles.length);
+		numFiles -= numRuns[0] * numRuns.length;
+		int pos = 0;
+		while (numFiles > 0) {
+			numRuns[pos]++;
+			numFiles--;
+			pos = (pos + 1 == inputFiles.length) ? 0 : pos + 1;
 		}
 		System.out.println(Arrays.toString(numRuns));
 		return numRuns;
@@ -110,7 +123,7 @@ public class ReadGenerator {
 			}
 			inputFiles[i] = inputFile;
 		}
-		(new ReadGenerator(args[0], args[1], inputFiles)).run(50, 500);
+		(new ReadGenerator(args[0], args[1], inputFiles)).run(100, 500);
 		System.out.println("Done generating reads.");
 
 	}

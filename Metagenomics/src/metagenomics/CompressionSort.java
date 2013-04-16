@@ -21,6 +21,7 @@ public class CompressionSort {
 		}
 		this.outputDir = new File(outputDirName);
 		if (outputDir.exists()) {
+			recursiveDelete(outputDir);
 			outputDir.delete();
 		}
 		outputDir.mkdir();
@@ -29,11 +30,19 @@ public class CompressionSort {
 			// create directory for each cluster, allocate stuff accordingly.
 			clusterDirs[i] = new File(outputDir + "/" + "cluster" + i);
 			if (clusterDirs[i].exists()) {
+				recursiveDelete(clusterDirs[i]);
 				clusterDirs[i].delete();
 			}
 			clusterDirs[i].mkdir();
 		}
 		init();
+	}
+
+	public static void recursiveDelete(File dir) {
+		File[] files = dir.listFiles();
+		for (int i = 0; i < files.length; i++){
+			files[i].delete();
+		}		
 	}
 
 	private void init() {
@@ -47,47 +56,63 @@ public class CompressionSort {
 	}
 
 	public void sort(int iterations) {
+		for (int i = 0; i < iterations; i++) {
+			sort();
+		}
+	}
+
+	public void sort() {
 		Map<File, Integer> clusterMap = new HashMap<File, Integer>();
 		for (int c = 0; c < clusterDirs.length; c++) {
 			File[] inputReads = clusterDirs[c].listFiles();
 			for (int i = 0; i < inputReads.length; i++) {
 				// compare compression lengths across clusters
-				int minLength = 0;
+				double minRatio = 0;
 				int belongingToCluster = 0;
 				for (int j = 0; j < clusterDirs.length; j++) {
-					int numBytes = getNumBytes(inputReads[i], j);
+					double compressRatio = getCompressRatio(inputReads[i], j);
 					if (j == 0) {
-						minLength = numBytes;
+						minRatio = compressRatio;
 					}
-					if (numBytes < minLength) {
-						minLength = numBytes;
+					if (compressRatio < minRatio) {
+						minRatio = compressRatio;
 						belongingToCluster = j;
 					}
-					System.out.printf(
-							"numBytes: %d \t minLength: %d \t cluster: %d\n",
-							numBytes, minLength, j);
+					// System.out.printf(
+					// "compressRatio: %f \t minRatio: %f \t cluster: %d\n",
+					// compressRatio, minRatio, j);
 				}
 				// store appropriate cluster location in map.
 				System.out.printf("Sort to cluster:%d \t %s\n",
 						belongingToCluster, inputReads[i].getName());
 				clusterMap.put(inputReads[i], belongingToCluster);
-
 			}
 		}
+		// move files to proper clusters
+		for (File f : clusterMap.keySet()) {
+			moveToCluster(f, clusterMap.get(f));
+		}
+
 	}
 
-	private int getNumBytes(File file, int c) {
+	private double getCompressRatio(File file, int c) {
 		StringBuilder sb = new StringBuilder();
 		File[] inputReads = clusterDirs[c].listFiles();
+		boolean belongsToCluster = false;
 		for (int i = 0; i < inputReads.length; i++) {
+			if (inputReads[i].getName().equals(file.getName())) {
+//				System.out.println(file.getName()+" Belongs to cluster " + c );
+				belongsToCluster = true;
+			}
 			sb.append(getString(inputReads[i]));
 		}
-		sb.append(getString(file));
+		if (!belongsToCluster)
+			sb.append(getString(file));
 		byte[] b = sb.toString().getBytes();
 		Deflater compresser = new Deflater();
 		compresser.setInput(b);
 		compresser.finish();
-		return compresser.deflate(new byte[b.length]);
+		return (double) compresser.deflate(new byte[b.length]) / b.length;
 
 	}
 
@@ -116,8 +141,9 @@ public class CompressionSort {
 	 * @param i
 	 */
 	private void moveToCluster(File file, int i) {
-		file.renameTo(new File(clusterDirs[i].getPath() + "/" + file.getName()));
-		System.out.println(file.getAbsolutePath());
+		File newPath = new File(clusterDirs[i].getPath() + "/" + file.getName());
+		file.renameTo(newPath);
+		System.out.println("New path" + newPath.getAbsolutePath());
 	}
 
 	/**
@@ -129,9 +155,13 @@ public class CompressionSort {
 					.println("Usage: CompressionSort inputDir outputDir nClusters");
 			System.exit(0);
 		}
+		(new ReadGenerator(args[0], args[1], new File[] {
+				new File("Genomes/Acidilobus-saccharovorans.fasta"),
+				new File("Genomes/Caldisphaera-lagunensis.fasta") })).run(100,
+				500);
 		CompressionSort cs = new CompressionSort(args[0], args[1],
 				Integer.parseInt(args[2]));
-		cs.sort(0);
+		cs.sort(20);
 		System.out.println("Done compression sort");
 
 	}
