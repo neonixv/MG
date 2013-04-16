@@ -16,6 +16,8 @@ public class ReadGenerator {
 	public ReadGenerator(String outputDir, String outputPrefix,
 			File[] inputFiles) {
 		this.outputDir = new File(outputDir);
+		if(this.outputDir.exists())
+			this.outputDir.delete();
 		this.outputDir.mkdir();
 		this.outputPrefix = outputPrefix;
 		this.inputFiles = inputFiles;
@@ -32,17 +34,7 @@ public class ReadGenerator {
 	}
 
 	public void readGenerator(int numFiles, int readLength) {
-		// half the runs to be distributed uniformly.
-		int[] numRuns = new int[inputFiles.length];
-		Arrays.fill(numRuns, (numFiles / 2) / inputFiles.length);
-		numFiles -= numFiles / 2;
-		while (numFiles > 0) {
-			int pos = (int) Math.random() * inputFiles.length;
-			int nReads = ((int) Math.random() * numFiles) + 1;
-			numRuns[pos] += nReads;
-			numFiles -= nReads;
-		}
-//		System.out.println(Arrays.toString(numRuns));
+		int[] numRuns = getNumRuns(numFiles);
 		int ithOutput = 0;
 		for (int i = 0; i < inputFiles.length; i++) {
 			Scanner sc = null;
@@ -60,7 +52,7 @@ public class ReadGenerator {
 			String seq = sb.toString();
 			sc.close();
 			for (int j = 0; j < numRuns[i]; j++) {
-				File outputFile = new File(outputDir + "/" + outputPrefix + ithOutput
+				File outputFile = new File(outputDir + "/" + outputPrefix + i +"_"+ ithOutput
 						+ ".txt");
 				if (outputFile.exists())
 					outputFile.delete();
@@ -79,6 +71,22 @@ public class ReadGenerator {
 
 			}
 		}
+	}
+
+	public int[] getNumRuns(int numFiles) {
+		// half the runs to be distributed uniformly.
+		int[] numRuns = new int[inputFiles.length];
+		System.out.println(numFiles);
+		Arrays.fill(numRuns, numFiles / (2*inputFiles.length));
+		numFiles -= numRuns[0] * numRuns.length;
+		while (numFiles > 0) {
+			int pos = (int) (Math.random() * inputFiles.length);
+			int nReads = (int)(Math.random() * numFiles) + 1;
+			numRuns[pos] += nReads;
+			numFiles -= nReads;
+		}
+		System.out.println(Arrays.toString(numRuns));
+		return numRuns;
 	}
 
 	/**
@@ -102,7 +110,7 @@ public class ReadGenerator {
 			}
 			inputFiles[i] = inputFile;
 		}
-		(new ReadGenerator(args[0], args[1], inputFiles)).run(20, 100);
+		(new ReadGenerator(args[0], args[1], inputFiles)).run(50, 500);
 		System.out.println("Done generating reads.");
 
 	}
