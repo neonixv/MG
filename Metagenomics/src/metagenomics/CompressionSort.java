@@ -67,24 +67,25 @@ public class CompressionSort {
 			File[] inputReads = clusterDirs[c].listFiles();
 			for (int i = 0; i < inputReads.length; i++) {
 				// compare compression lengths across clusters
-				double minRatio = 0;
+				int minDist = 0;
 				int belongingToCluster = 0;
 				for (int j = 0; j < clusterDirs.length; j++) {
-					double compressRatio = getCompressRatio(inputReads[i], j);
+					//if file already belongs to same cluster, only compute ratio once?
+					int compressDist = getCompressDist(inputReads[i], j);
 					if (j == 0) {
-						minRatio = compressRatio;
+						minDist = compressDist;
 					}
-					if (compressRatio < minRatio) {
-						minRatio = compressRatio;
+					if (compressDist < minDist) {
+						minDist = compressDist;
 						belongingToCluster = j;
 					}
-					// System.out.printf(
-					// "compressRatio: %f \t minRatio: %f \t cluster: %d\n",
-					// compressRatio, minRatio, j);
+//					 System.out.printf(
+//					 "compressDist: %d \t minDist: %d \t cluster: %d\n",
+//					 compressDist, minDist, j);
 				}
 				// store appropriate cluster location in map.
-				System.out.printf("Sort to cluster:%d \t %s\n",
-						belongingToCluster, inputReads[i].getName());
+//				System.out.printf("Sort to cluster:%d \t %s\n",
+//						belongingToCluster, inputReads[i].getName());
 				clusterMap.put(inputReads[i], belongingToCluster);
 			}
 		}
@@ -95,25 +96,27 @@ public class CompressionSort {
 
 	}
 
-	private double getCompressRatio(File file, int c) {
+	private int getCompressDist(File file, int c) {
 		StringBuilder sb = new StringBuilder();
 		File[] inputReads = clusterDirs[c].listFiles();
-		boolean belongsToCluster = false;
 		for (int i = 0; i < inputReads.length; i++) {
-			if (inputReads[i].getName().equals(file.getName())) {
-//				System.out.println(file.getName()+" Belongs to cluster " + c );
-				belongsToCluster = true;
+			if (!inputReads[i].getName().equals(file.getName())) {
+				sb.append(getString(inputReads[i]));
 			}
-			sb.append(getString(inputReads[i]));
 		}
-		if (!belongsToCluster)
-			sb.append(getString(file));
+		//calculate compression size without file
 		byte[] b = sb.toString().getBytes();
 		Deflater compresser = new Deflater();
 		compresser.setInput(b);
 		compresser.finish();
-		return (double) compresser.deflate(new byte[b.length]) / b.length;
-
+		int bytesWithoutFile = compresser.deflate(new byte[b.length]);
+		//now with the file
+		sb.append(getString(file));
+		b = sb.toString().getBytes();
+		compresser = new Deflater();
+		compresser.setInput(b);
+		compresser.finish();
+		return compresser.deflate(new byte[b.length]) - bytesWithoutFile;
 	}
 
 	private String getString(File file) {
