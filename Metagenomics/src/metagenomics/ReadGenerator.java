@@ -13,6 +13,11 @@ public class ReadGenerator {
 	private String outputPrefix;
 	private File[] inputFiles;
 
+	/**
+	 * @param outputDir
+	 * @param outputPrefix
+	 * @param inputFiles
+	 */
 	public ReadGenerator(String outputDir, String outputPrefix,
 			File[] inputFiles) {
 		this.outputDir = new File(outputDir);
@@ -25,10 +30,6 @@ public class ReadGenerator {
 		this.inputFiles = inputFiles;
 	}
 
-	public void run(int nFiles, int readLength) {
-		readGenerator(nFiles, readLength);
-
-	}
 
 	public String randomReads(int readLength, String sequence) {
 		int startPos = (int) (Math.random() * (sequence.length() - readLength));
@@ -36,6 +37,7 @@ public class ReadGenerator {
 	}
 
 	public void readGenerator(int numFiles, int readLength) {
+		System.out.printf("Running with %d numfiles, with %d long reads. \n", numFiles, readLength);
 		int[] numRuns = getNumRuns(numFiles);
 		int ithOutput = 0;
 		for (int i = 0; i < inputFiles.length; i++) {
@@ -123,7 +125,7 @@ public class ReadGenerator {
 			}
 			inputFiles[i] = inputFile;
 		}
-		(new ReadGenerator(args[0], args[1], inputFiles)).run(100, 500);
+		(new ReadGenerator(args[0], args[1], inputFiles)).readGenerator(1000, 500);
 		System.out.println("Done generating reads.");
 
 	}

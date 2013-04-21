@@ -2,6 +2,8 @@ package metagenomics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -13,6 +15,11 @@ public class CompressionSort {
 	File outputDir;
 	File[] clusterDirs;
 
+	/**
+	 * @param inputDirName
+	 * @param outputDirName
+	 * @param nClusters
+	 */
 	public CompressionSort(String inputDirName, String outputDirName,
 			int nClusters) {
 		this.inputDir = new File(inputDirName);
@@ -40,13 +47,15 @@ public class CompressionSort {
 
 	public static void recursiveDelete(File dir) {
 		File[] files = dir.listFiles();
-		for (int i = 0; i < files.length; i++){
+		for (int i = 0; i < files.length; i++) {
 			files[i].delete();
-		}		
+		}
 	}
 
 	private void init() {
 		File[] inputReads = inputDir.listFiles();
+		//shuffle array first
+		Collections.shuffle(Arrays.asList(inputReads));
 		int roundRobin = 0;
 		for (int i = 0; i < inputReads.length; i++) {
 			moveToCluster(inputReads[i], roundRobin);
@@ -56,12 +65,21 @@ public class CompressionSort {
 	}
 
 	public void sort(int iterations) {
-		for (int i = 0; i < iterations; i++) {
-			sort();
-		}
+		// for (int i = 0; i < iterations; i++) {
+		// System.out.printf("----BEGINNING %dth ITERATION----\n", i);
+		// sort();
+		// }
+		int i = 0;
+		do {
+			System.out.printf("----BEGINNING ITERATION %d----\n", i);
+			i++;
+			if (i > 250)
+				return;
+		} while (sort());
 	}
 
-	public void sort() {
+	public boolean sort() {
+		boolean wasMoved = false;
 		Map<File, Integer> clusterMap = new HashMap<File, Integer>();
 		for (int c = 0; c < clusterDirs.length; c++) {
 			File[] inputReads = clusterDirs[c].listFiles();
@@ -70,7 +88,6 @@ public class CompressionSort {
 				int minDist = 0;
 				int belongingToCluster = 0;
 				for (int j = 0; j < clusterDirs.length; j++) {
-					//if file already belongs to same cluster, only compute ratio once?
 					int compressDist = getCompressDist(inputReads[i], j);
 					if (j == 0) {
 						minDist = compressDist;
@@ -79,20 +96,21 @@ public class CompressionSort {
 						minDist = compressDist;
 						belongingToCluster = j;
 					}
-//					 System.out.printf(
-//					 "compressDist: %d \t minDist: %d \t cluster: %d\n",
-//					 compressDist, minDist, j);
+					// System.out.printf(
+					// "compressDist: %d \t minDist: %d \t cluster: %d\n",
+					// compressDist, minDist, j);
 				}
 				// store appropriate cluster location in map.
-//				System.out.printf("Sort to cluster:%d \t %s\n",
-//						belongingToCluster, inputReads[i].getName());
+				// System.out.printf("Sort to cluster:%d \t %s\n",
+				// belongingToCluster, inputReads[i].getName());
 				clusterMap.put(inputReads[i], belongingToCluster);
 			}
 		}
 		// move files to proper clusters
 		for (File f : clusterMap.keySet()) {
-			moveToCluster(f, clusterMap.get(f));
+			wasMoved = moveToCluster(f, clusterMap.get(f)) ? true : wasMoved;
 		}
+		return wasMoved;
 
 	}
 
@@ -104,13 +122,13 @@ public class CompressionSort {
 				sb.append(getString(inputReads[i]));
 			}
 		}
-		//calculate compression size without file
+		// calculate compression size without file
 		byte[] b = sb.toString().getBytes();
 		Deflater compresser = new Deflater();
 		compresser.setInput(b);
 		compresser.finish();
 		int bytesWithoutFile = compresser.deflate(new byte[b.length]);
-		//now with the file
+		// now with the file
 		sb.append(getString(file));
 		b = sb.toString().getBytes();
 		compresser = new Deflater();
@@ -143,10 +161,18 @@ public class CompressionSort {
 	 * @param file
 	 * @param i
 	 */
-	private void moveToCluster(File file, int i) {
+	private boolean moveToCluster(File file, int i) {
+		boolean wasMoved = false;
 		File newPath = new File(clusterDirs[i].getPath() + "/" + file.getName());
-		file.renameTo(newPath);
-		System.out.println("New path" + newPath.getAbsolutePath());
+		if (!newPath.getPath().equals(file.getPath())) { // only move clusters
+															// if needed
+			file.renameTo(newPath);
+			wasMoved = true;
+		}
+		boolean correctCluster = Integer
+				.parseInt(file.getName().charAt(4) + "") == i;
+		 System.out.printf("\t%d,%s,%b\n", i, file.getName(), correctCluster);
+		return wasMoved;
 	}
 
 	/**
@@ -158,14 +184,18 @@ public class CompressionSort {
 					.println("Usage: CompressionSort inputDir outputDir nClusters");
 			System.exit(0);
 		}
-		(new ReadGenerator(args[0], args[1], new File[] {
-				new File("Genomes/Acidilobus-saccharovorans.fasta"),
-				new File("Genomes/Caldisphaera-lagunensis.fasta") })).run(100,
-				500);
-		CompressionSort cs = new CompressionSort(args[0], args[1],
-				Integer.parseInt(args[2]));
-		cs.sort(20);
-		System.out.println("Done compression sort");
+		for (int i = 0; i < 5; i++) {
+			(new ReadGenerator("temp", "read", new File[] {
+					new File("Genomes/Acidilobus-saccharovorans.fasta"),
+					new File("Genomes/Caldisphaera-lagunensis.fasta") })).readGenerator(
+					401, 1024);
+			long timeStart = System.currentTimeMillis();
+			CompressionSort cs = new CompressionSort(args[0], args[1],
+					Integer.parseInt(args[2]));
+			cs.sort(100);
+			System.out.println("Done compression sort, took "
+					+ (System.currentTimeMillis() - timeStart) + " ms.");
+		}
 
 	}
 
