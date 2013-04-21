@@ -14,6 +14,8 @@ public class CompressionSort {
 	File inputDir;
 	File outputDir;
 	File[] clusterDirs;
+	int totalFiles;
+	final double CLUSTERDIFFTHRESHOLD = 0.25;
 
 	/**
 	 * @param inputDirName
@@ -54,6 +56,7 @@ public class CompressionSort {
 
 	private void init() {
 		File[] inputReads = inputDir.listFiles();
+		totalFiles = inputReads.length;
 		//shuffle array first
 		Collections.shuffle(Arrays.asList(inputReads));
 		int roundRobin = 0;
@@ -65,14 +68,15 @@ public class CompressionSort {
 	}
 
 	public void sort(int iterations) {
-		// for (int i = 0; i < iterations; i++) {
-		// System.out.printf("----BEGINNING %dth ITERATION----\n", i);
-		// sort();
-		// }
 		int i = 0;
 		do {
 			System.out.printf("----BEGINNING ITERATION %d----\n", i);
 			i++;
+			int fileDiff = Math.abs(clusterDirs[0].list().length - clusterDirs[1].list().length);
+			if (fileDiff > totalFiles*CLUSTERDIFFTHRESHOLD){
+				System.out.println("Relative cluster size max exceeded.");
+				return;
+			}
 			if (i > 250)
 				return;
 		} while (sort());
