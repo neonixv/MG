@@ -8,6 +8,8 @@ import metagenomics.ReadGenerator;
 public class Experimental {
 
 	/**
+	 * Using a constant number of files, test with increasing run length:
+	 * 2^9 to 2^13
 	 * @param args
 	 */
 	public static void main(String[] args) {
