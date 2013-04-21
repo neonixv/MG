@@ -15,7 +15,7 @@ public class CompressionSort {
 	File outputDir;
 	File[] clusterDirs;
 	int totalFiles;
-	final double CLUSTERDIFFTHRESHOLD = 0.25;
+	final double CLUSTERDIFFTHRESHOLD = 0.2;
 
 	/**
 	 * @param inputDirName
@@ -57,7 +57,7 @@ public class CompressionSort {
 	private void init() {
 		File[] inputReads = inputDir.listFiles();
 		totalFiles = inputReads.length;
-		//shuffle array first
+		// shuffle array first
 		Collections.shuffle(Arrays.asList(inputReads));
 		int roundRobin = 0;
 		for (int i = 0; i < inputReads.length; i++) {
@@ -72,9 +72,14 @@ public class CompressionSort {
 		do {
 			System.out.printf("----BEGINNING ITERATION %d----\n", i);
 			i++;
-			int fileDiff = Math.abs(clusterDirs[0].list().length - clusterDirs[1].list().length);
-			if (fileDiff > totalFiles*CLUSTERDIFFTHRESHOLD){
-				System.out.println("Relative cluster size max exceeded.");
+			int[] lengths = new int[] { clusterDirs[0].list().length,
+					clusterDirs[1].list().length };
+			double fileDiff = Math.min((double) lengths[0] / lengths[1],
+					(double) lengths[1] / lengths[0]);
+			if (fileDiff < CLUSTERDIFFTHRESHOLD) {
+				System.out
+						.printf("Relative cluster size max exceeded. fileDiff %f totalFiles %d\n",
+								fileDiff, totalFiles);
 				return;
 			}
 			if (i > 250)
@@ -175,7 +180,7 @@ public class CompressionSort {
 		}
 		boolean correctCluster = Integer
 				.parseInt(file.getName().charAt(4) + "") == i;
-		 System.out.printf("\t%d,%s,%b\n", i, file.getName(), correctCluster);
+		System.out.printf("\t%d,%s,%b\n", i, file.getName(), correctCluster);
 		return wasMoved;
 	}
 
@@ -191,8 +196,8 @@ public class CompressionSort {
 		for (int i = 0; i < 5; i++) {
 			(new ReadGenerator("temp", "read", new File[] {
 					new File("Genomes/Acidilobus-saccharovorans.fasta"),
-					new File("Genomes/Caldisphaera-lagunensis.fasta") })).readGenerator(
-					401, 1024);
+					new File("Genomes/Caldisphaera-lagunensis.fasta") }))
+					.readGenerator(40, 1024);
 			long timeStart = System.currentTimeMillis();
 			CompressionSort cs = new CompressionSort(args[0], args[1],
 					Integer.parseInt(args[2]));
