@@ -20,7 +20,7 @@ public class Experimental {
 				long timeStart = System.currentTimeMillis();
 				CompressionSort cs = new CompressionSort("expreads", "expcluster",
 						2);
-				cs.sort(100);
+				cs.sort();
 				System.out.println("Done compression sort, took "
 						+ (System.currentTimeMillis() - timeStart) + " ms.");
 			}

@@ -67,7 +67,7 @@ public class CompressionSort {
 		}
 	}
 
-	public void sort(int iterations) {
+	public void sort() {
 		int i = 0;
 		do {
 			System.out.printf("----BEGINNING ITERATION %d----\n", i);
@@ -84,10 +84,10 @@ public class CompressionSort {
 			}
 			if (i > 250)
 				return;
-		} while (sort());
+		} while (compressSort());
 	}
 
-	public boolean sort() {
+	private boolean compressSort() {
 		boolean wasMoved = false;
 		Map<File, Integer> clusterMap = new HashMap<File, Integer>();
 		for (int c = 0; c < clusterDirs.length; c++) {
@@ -201,7 +201,7 @@ public class CompressionSort {
 			long timeStart = System.currentTimeMillis();
 			CompressionSort cs = new CompressionSort(args[0], args[1],
 					Integer.parseInt(args[2]));
-			cs.sort(100);
+			cs.sort();
 			System.out.println("Done compression sort, took "
 					+ (System.currentTimeMillis() - timeStart) + " ms.");
 		}
