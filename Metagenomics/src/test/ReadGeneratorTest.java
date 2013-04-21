@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Random;
 
 import metagenomics.ReadGenerator;
 
@@ -24,7 +25,8 @@ public class ReadGeneratorTest {
 		File inputFile = mock(File.class);
 		ReadGenerator rg = new ReadGenerator("test", "test",
 				new File[] { inputFile });
-		String previous = "";
+		String previous = rg.randomReads(5,
+				"asdfghjklqwertyuiopzxcvbnmqwertyuiopasdfghjklzxcvbnm");;
 		boolean differenceExists = false;
 
 		for (int i = 0; i < 40; i++) {
@@ -38,7 +40,7 @@ public class ReadGeneratorTest {
 		assertTrue(differenceExists);
 	}
 	
-	@Test
+//	@Test
 	public void testNumRuns() {
 		File inputFile1 = mock(File.class);
 		File inputFile2 = mock(File.class);
@@ -53,6 +55,21 @@ public class ReadGeneratorTest {
 			if(!Arrays.equals(actual, prev_numRuns))
 				differenceExists = true;
 			prev_numRuns = actual;
+		}
+		assertTrue(differenceExists);
+	}
+	
+	@Test
+	public void testRandomDNA(){
+		String previous = ReadGenerator.randomDNA(new Random(), 10);
+		boolean differenceExists = false;
+
+		for (int i = 0; i < 40; i++) {
+			System.out.println(previous);
+			String actual = ReadGenerator.randomDNA(new Random(), 10);
+			if (!actual.equals(previous))
+				differenceExists = true;
+			previous = actual;
 		}
 		assertTrue(differenceExists);
 	}

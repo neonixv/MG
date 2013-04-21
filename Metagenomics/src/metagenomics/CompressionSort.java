@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.zip.Deflater;
 
@@ -15,7 +16,7 @@ public class CompressionSort {
 	File outputDir;
 	File[] clusterDirs;
 	int totalFiles;
-	final double CLUSTERDIFFTHRESHOLD = 0.2;
+	final double CLUSTERDIFFTHRESHOLD = 0.1;
 
 	/**
 	 * @param inputDirName
@@ -125,6 +126,8 @@ public class CompressionSort {
 
 	private int getCompressDist(File file, int c) {
 		StringBuilder sb = new StringBuilder();
+		//prepend with random data
+		sb.append(ReadGenerator.randomDNA(new Random(), 640)); //10 * 4^3
 		File[] inputReads = clusterDirs[c].listFiles();
 		for (int i = 0; i < inputReads.length; i++) {
 			if (!inputReads[i].getName().equals(file.getName())) {

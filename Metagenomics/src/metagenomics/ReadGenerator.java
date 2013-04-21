@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 public class ReadGenerator {
@@ -104,6 +105,15 @@ public class ReadGenerator {
 		return numRuns;
 	}
 
+	public static String randomDNA(Random rng, int length){
+		String nucleotides = "ATCG";
+		char[] c = new char[length];
+		for(int i = 0; i < length; i++){
+			c[i] = nucleotides.charAt(rng.nextInt(nucleotides.length())); 
+		}
+		return new String(c);
+		
+	}
 	/**
 	 * @param args
 	 */
