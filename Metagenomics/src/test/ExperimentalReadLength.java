@@ -5,11 +5,11 @@ import java.io.File;
 import metagenomics.CompressionSort;
 import metagenomics.ReadGenerator;
 
-public class Experimental {
+public class ExperimentalReadLength {
 
 	/**
-	 * Using a constant number of files, test with increasing run length:
-	 * 2^9 to 2^15
+	 * Tests, varying readlength from 2^9 up to 2^15.
+	 * Files are kept constant at 101
 	 * @param args
 	 */
 	public static void main(String[] args) {
