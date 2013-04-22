@@ -9,11 +9,12 @@ public class Experimental {
 
 	/**
 	 * Using a constant number of files, test with increasing run length:
-	 * 2^9 to 2^13
+	 * 2^9 to 2^15
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		for (int factor = 0; factor < 5; factor++) {
+		System.out.println("randomDNA prepended, readLengths 2^9 to 2^15");
+		for (int factor = 0; factor < 6; factor++) {
 			for (int i = 0; i < 3; i++) {
 				(new ReadGenerator("expreads", "expr", new File[] {
 						new File("Genomes/Acidilobus-saccharovorans.fasta"),
