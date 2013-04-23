@@ -15,7 +15,7 @@ public class CompressionSort {
 	File outputDir;
 	File[] clusterDirs;
 	int totalFiles;
-	final double CLUSTERDIFFTHRESHOLD = 0.2;
+	final double CLUSTERDIFFTHRESHOLD = 0.1;
 
 	/**
 	 * @param inputDirName
