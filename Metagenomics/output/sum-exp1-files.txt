@@ -1,4 +1,4 @@
-[output/exp1-files.txt, 3]
+[output/exp1-files.txt, 5]
 [16, 16]
 ----BEGINNING ITERATION 0----
 [8, 8, 8, 8]
@@ -6,6 +6,10 @@
 [8, 10, 6, 8]
 ----BEGINNING ITERATION 2----
 [12, 10, 6, 4]
+----BEGINNING ITERATION 3----
+[13, 0, 16, 3]
+----BEGINNING ITERATION 4----
+[3, 0, 16, 13]
 [16, 16]
 ----BEGINNING ITERATION 0----
 [8, 8, 8, 8]
@@ -13,13 +17,10 @@
 [9, 9, 7, 7]
 ----BEGINNING ITERATION 2----
 [8, 2, 14, 8]
-[16, 16]
+----BEGINNING ITERATION 3----
+[4, 0, 16, 12]
 ----BEGINNING ITERATION 0----
 [8, 8, 8, 8]
-----BEGINNING ITERATION 1----
-[8, 14, 2, 8]
-----BEGINNING ITERATION 2----
-[14, 14, 2, 2]
 [32, 32]
 ----BEGINNING ITERATION 0----
 [19, 13, 19, 13]
@@ -27,13 +28,21 @@
 [14, 1, 31, 18]
 ----BEGINNING ITERATION 2----
 [3, 0, 32, 29]
-[32, 32]
 ----BEGINNING ITERATION 0----
 [15, 17, 15, 17]
 ----BEGINNING ITERATION 1----
 [26, 29, 3, 6]
+[32, 32]
 ----BEGINNING ITERATION 0----
 [12, 20, 12, 20]
+----BEGINNING ITERATION 1----
+[20, 18, 14, 12]
+----BEGINNING ITERATION 2----
+[16, 14, 18, 16]
+----BEGINNING ITERATION 3----
+[18, 8, 24, 14]
+----BEGINNING ITERATION 4----
+[12, 25, 7, 20]
 [64, 64]
 ----BEGINNING ITERATION 0----
 [35, 29, 35, 29]
@@ -41,3 +50,7 @@
 [45, 59, 5, 19]
 ----BEGINNING ITERATION 2----
 [49, 33, 31, 15]
+----BEGINNING ITERATION 3----
+[24, 33, 31, 40]
+----BEGINNING ITERATION 4----
+[34, 18, 46, 30]
