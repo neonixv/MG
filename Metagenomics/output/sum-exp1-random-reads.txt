@@ -1,0 +1,120 @@
+[output/exp1-random-reads.txt, 3]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 1]
+[51, 50]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]

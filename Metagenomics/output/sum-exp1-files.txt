@@ -1,0 +1,43 @@
+[output/exp1-files.txt, 3]
+[16, 16]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[16, 16]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[16, 16]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[32, 32]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
+[32, 32]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+[64, 64]
+----BEGINNING ITERATION 0----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 1----
+[0, 0, 0, 0]
+----BEGINNING ITERATION 2----
+[0, 0, 0, 0]
