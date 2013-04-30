@@ -183,7 +183,7 @@ public class CompressionSort {
 		}
 		boolean correctCluster = Integer
 				.parseInt(file.getName().charAt(4) + "") == i;
-		System.out.printf("\t%d,%s,%b\n", i, file.getName(), correctCluster);
+		System.out.printf("\t%d,%s,%d\n", i, file.getName(), correctCluster==true?1:0);
 		return wasMoved;
 	}
 
