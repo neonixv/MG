@@ -17,7 +17,7 @@ public class Summary {
 				// beginning init
 				if (line.charAt(0) == '[') {
 					System.out.println(line);
-					for (int i = 0; i < iter; i++) {
+					for (int i = 0; i < iter && in.hasNextLine(); i++) {
 						int[] counts = new int[4];
 						do {
 							line = in.nextLine();

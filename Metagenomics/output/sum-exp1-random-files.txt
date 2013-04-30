@@ -1,99 +1,99 @@
 [output/exp1-random-files.txt, 3]
 [16, 16]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[9, 7, 9, 7]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[5, 3, 13, 11]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[2, 7, 9, 14]
 [16, 16]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[6, 10, 6, 10]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[14, 16, 0, 2]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[9, 7, 9, 7]
 [32, 32]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[13, 19, 13, 19]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[16, 11, 21, 16]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[23, 17, 15, 9]
 [32, 32]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[14, 18, 14, 18]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[22, 21, 11, 10]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[24, 13, 19, 8]
 [32, 32]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[16, 16, 16, 16]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[24, 20, 12, 8]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[14, 1, 31, 18]
 [64, 64]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[31, 33, 31, 33]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[34, 59, 5, 30]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[44, 63, 1, 20]
 [64, 64]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[28, 36, 28, 36]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[31, 31, 33, 33]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[28, 44, 20, 36]
 [64, 64]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[33, 31, 33, 31]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[27, 3, 61, 37]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[16, 7, 57, 48]
 [128, 128]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[61, 67, 61, 67]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[68, 112, 16, 60]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[64, 85, 43, 64]
 [128, 128]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[64, 64, 64, 64]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[69, 51, 77, 59]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[85, 101, 27, 43]
 [128, 128]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[71, 57, 71, 57]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[68, 27, 101, 60]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[82, 47, 81, 46]
 [256, 256]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[140, 116, 140, 116]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[129, 80, 176, 127]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[113, 95, 161, 143]
 [256, 256]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[120, 136, 120, 136]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[138, 148, 108, 118]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[172, 235, 21, 84]
 [256, 256]
 ----BEGINNING ITERATION 0----
-[0, 0, 0, 0]
+[124, 132, 124, 132]
 ----BEGINNING ITERATION 1----
-[0, 0, 0, 0]
+[188, 116, 140, 68]
 ----BEGINNING ITERATION 2----
-[0, 0, 0, 0]
+[108, 74, 182, 148]
