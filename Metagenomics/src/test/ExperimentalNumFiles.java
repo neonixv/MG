@@ -13,6 +13,7 @@ public class ExperimentalNumFiles {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.out.println("randomDNA prepended, varying numFiles 2^5 to 2^10");
 		for (int factor = 0; factor < 5; factor++) {
 			for (int i = 0; i < 3; i++) {
 				(new ReadGenerator("expreads", "expr", new File[] {
