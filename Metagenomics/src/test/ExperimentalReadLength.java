@@ -9,7 +9,7 @@ public class ExperimentalReadLength {
 
 	/**
 	 * Tests, varying readlength from 2^9 up to 2^15.
-	 * Files are kept constant at 101
+	 * Files are kept constant at 2000
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class ExperimentalReadLength {
 				(new ReadGenerator("expreads", "expr", new File[] {
 						new File("Genomes/Acidilobus-saccharovorans.fasta"),
 						new File("Genomes/Caldisphaera-lagunensis.fasta") }))
-						.readGenerator(101, (int)Math.pow(2, 9+factor));
+						.readGenerator(2000, (int)Math.pow(2, 9+factor));
 				long timeStart = System.currentTimeMillis();
 				CompressionSort cs = new CompressionSort("expreads", "expcluster",
 						2);

@@ -106,9 +106,14 @@ public class CompressionSort {
 		int roundRobin = 0;
 		for (int i = 0; i < inputReads.length; i++) {
 			readClusters.get(roundRobin).add(
-					new Read(getString(inputReads[i]), roundRobin, inputReads[i].getName()));
+					new Read(getString(inputReads[i]), roundRobin,
+							inputReads[i].getName()));
 			roundRobin = (roundRobin + 1 == readClusters.size()) ? 0
 					: roundRobin + 1;
+			boolean correctCluster = Integer
+					.parseInt(inputReads[i].getName().charAt(4) + "") == roundRobin;
+			System.out.printf("\t%d,%s,%d\n", roundRobin, inputReads[i].getName(),
+					(correctCluster) ? 1 : 0);
 		}
 	}
 
@@ -151,13 +156,11 @@ public class CompressionSort {
 						minDist = compressDist;
 						belongingToCluster = i;
 					}
-//					 System.out.printf(
-//					 "compressDist: %d \t minDist: %d \t cluster: %d\n",
-//					 compressDist, minDist, i);
+//					System.out
+//							.printf("compressDist: %d \t minDist: %d \t cluster: %d \t belongingtoCluster: %d\n",
+//									compressDist, minDist, i,
+//									belongingToCluster);
 				}
-				// store appropriate cluster location in map.
-//				 System.out.printf("Sort to cluster:%d\n",
-//				 belongingToCluster);
 				clusterMap.put(read, belongingToCluster);
 
 			}
@@ -169,18 +172,24 @@ public class CompressionSort {
 		for (int i = 0; i < readClusters.size(); i++) {
 			newClusters.add(new ArrayList<Read>());
 		}
-
+		
+		int moveCounter = 0;
 		for (Read s : clusterMap.keySet()) {
 			int newCluster = clusterMap.get(s);
 			if (s.cluster != newCluster) {
 				wasMoved = true;
 				s.cluster = newCluster;
+				moveCounter++;
 			}
 			newClusters.get(newCluster).add(s);
-			boolean correctCluster = Integer.parseInt(s.fileName.charAt(4) + "") == newCluster;
-			System.out.printf("\t%d,%s,%d\n", newCluster, s.fileName, (correctCluster)?1:0);
+			boolean correctCluster = Integer
+					.parseInt(s.fileName.charAt(4) + "") == newCluster;
+			System.out.printf("\t%d,%s,%d\n", newCluster, s.fileName,
+					(correctCluster) ? 1 : 0);
 		}
+		//replace old read clusters
 		readClusters = newClusters;
+		System.err.printf("Moved %d reads to different cluster.\n", moveCounter);
 		return wasMoved;
 
 	}
@@ -191,7 +200,7 @@ public class CompressionSort {
 		sb.append(ReadGenerator.randomDNA(new Random(), 640)); // 10 * 4^3
 		for (Read s : readClusters.get(c)) {
 			if (!s.readString.equals(read)) {
-				sb.append(s);
+				sb.append(s.readString);
 			}
 		}
 		// calculate compression size without file
