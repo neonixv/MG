@@ -13,7 +13,7 @@ public class ExperimentalReadLength {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("randomDNA prepended, readLengths 2^9 to 2^15");
+		System.out.println("randomDNA prepended, using heap instead of files. readLengths 2^9 to 2^15");
 		for (int factor = 0; factor < 6; factor++) {
 			for (int i = 0; i < 3; i++) {
 				(new ReadGenerator("expreads", "expr", new File[] {

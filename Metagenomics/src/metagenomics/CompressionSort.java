@@ -2,6 +2,7 @@ package metagenomics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,11 +13,59 @@ import java.util.zip.Deflater;
 
 public class CompressionSort {
 
+	public class Read {
+		String readString;
+		int cluster;
+		String fileName;
+
+		public Read(String s, int c, String f) {
+			this.readString = s;
+			this.cluster = c;
+			this.fileName = f;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + cluster;
+			result = prime * result
+					+ ((readString == null) ? 0 : readString.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Read other = (Read) obj;
+			if (!getOuterType().equals(other.getOuterType()))
+				return false;
+			// if (cluster != other.cluster)
+			// return false;
+			if (readString == null) {
+				if (other.readString != null)
+					return false;
+			} else if (!readString.equals(other.readString))
+				return false;
+			return true;
+		}
+
+		private CompressionSort getOuterType() {
+			return CompressionSort.this;
+		}
+	}
+
 	File inputDir;
 	File outputDir;
-	File[] clusterDirs;
 	int totalFiles;
 	final double CLUSTERDIFFTHRESHOLD = 0.1;
+	ArrayList<ArrayList<Read>> readClusters;
 
 	/**
 	 * @param inputDirName
@@ -25,6 +74,7 @@ public class CompressionSort {
 	 */
 	public CompressionSort(String inputDirName, String outputDirName,
 			int nClusters) {
+		readClusters = new ArrayList<ArrayList<Read>>(nClusters);
 		this.inputDir = new File(inputDirName);
 		if (!inputDir.exists()) {
 			System.err.println("Cannot find input directory " + inputDirName);
@@ -35,16 +85,6 @@ public class CompressionSort {
 			outputDir.delete();
 		}
 		outputDir.mkdir();
-		clusterDirs = new File[nClusters];
-		for (int i = 0; i < clusterDirs.length; i++) {
-			// create directory for each cluster, allocate stuff accordingly.
-			clusterDirs[i] = new File(outputDir + "/" + "cluster" + i);
-			if (clusterDirs[i].exists()) {
-				recursiveDelete(clusterDirs[i]);
-				clusterDirs[i].delete();
-			}
-			clusterDirs[i].mkdir();
-		}
 		init();
 	}
 
@@ -56,14 +96,18 @@ public class CompressionSort {
 	}
 
 	private void init() {
+		// two clusters
+		readClusters.add(new ArrayList<Read>());
+		readClusters.add(new ArrayList<Read>());
 		File[] inputReads = inputDir.listFiles();
 		totalFiles = inputReads.length;
 		// shuffle array first
 		Collections.shuffle(Arrays.asList(inputReads));
 		int roundRobin = 0;
 		for (int i = 0; i < inputReads.length; i++) {
-			moveToCluster(inputReads[i], roundRobin);
-			roundRobin = (roundRobin + 1 == clusterDirs.length) ? 0
+			readClusters.get(roundRobin).add(
+					new Read(getString(inputReads[i]), roundRobin, inputReads[i].getName()));
+			roundRobin = (roundRobin + 1 == readClusters.size()) ? 0
 					: roundRobin + 1;
 		}
 	}
@@ -73,8 +117,10 @@ public class CompressionSort {
 		do {
 			System.out.printf("----BEGINNING ITERATION %d----\n", i);
 			i++;
-			int[] lengths = new int[] { clusterDirs[0].list().length,
-					clusterDirs[1].list().length };
+			// keep count of read allocations as you iterate, then use that to
+			// compare against cluster diff threshold
+			int[] lengths = new int[] { readClusters.get(0).size(),
+					readClusters.get(1).size() };
 			double fileDiff = Math.min((double) lengths[0] / lengths[1],
 					(double) lengths[1] / lengths[0]);
 			if (fileDiff < CLUSTERDIFFTHRESHOLD) {
@@ -90,48 +136,62 @@ public class CompressionSort {
 
 	private boolean compressSort() {
 		boolean wasMoved = false;
-		Map<File, Integer> clusterMap = new HashMap<File, Integer>();
-		for (int c = 0; c < clusterDirs.length; c++) {
-			File[] inputReads = clusterDirs[c].listFiles();
-			for (int i = 0; i < inputReads.length; i++) {
+		Map<Read, Integer> clusterMap = new HashMap<Read, Integer>();
+		for (ArrayList<Read> cluster : readClusters) {
+			for (Read read : cluster) {
 				// compare compression lengths across clusters
 				int minDist = 0;
 				int belongingToCluster = 0;
-				for (int j = 0; j < clusterDirs.length; j++) {
-					int compressDist = getCompressDist(inputReads[i], j);
-					if (j == 0) {
+				for (int i = 0; i < readClusters.size(); i++) {
+					int compressDist = getCompressDist(read.readString, i);
+					if (i == 0) {
 						minDist = compressDist;
 					}
 					if (compressDist < minDist) {
 						minDist = compressDist;
-						belongingToCluster = j;
+						belongingToCluster = i;
 					}
-					// System.out.printf(
-					// "compressDist: %d \t minDist: %d \t cluster: %d\n",
-					// compressDist, minDist, j);
+//					 System.out.printf(
+//					 "compressDist: %d \t minDist: %d \t cluster: %d\n",
+//					 compressDist, minDist, i);
 				}
 				// store appropriate cluster location in map.
-				// System.out.printf("Sort to cluster:%d \t %s\n",
-				// belongingToCluster, inputReads[i].getName());
-				clusterMap.put(inputReads[i], belongingToCluster);
+//				 System.out.printf("Sort to cluster:%d\n",
+//				 belongingToCluster);
+				clusterMap.put(read, belongingToCluster);
+
 			}
 		}
 		// move files to proper clusters
-		for (File f : clusterMap.keySet()) {
-			wasMoved = moveToCluster(f, clusterMap.get(f)) ? true : wasMoved;
+		// initialize empty new clusters
+		ArrayList<ArrayList<Read>> newClusters = new ArrayList<ArrayList<Read>>(
+				readClusters.size());
+		for (int i = 0; i < readClusters.size(); i++) {
+			newClusters.add(new ArrayList<Read>());
 		}
+
+		for (Read s : clusterMap.keySet()) {
+			int newCluster = clusterMap.get(s);
+			if (s.cluster != newCluster) {
+				wasMoved = true;
+				s.cluster = newCluster;
+			}
+			newClusters.get(newCluster).add(s);
+			boolean correctCluster = Integer.parseInt(s.fileName.charAt(4) + "") == newCluster;
+			System.out.printf("\t%d,%s,%d\n", newCluster, s.fileName, (correctCluster)?1:0);
+		}
+		readClusters = newClusters;
 		return wasMoved;
 
 	}
 
-	private int getCompressDist(File file, int c) {
+	private int getCompressDist(String read, int c) {
 		StringBuilder sb = new StringBuilder();
-		//prepend with random data
-		sb.append(ReadGenerator.randomDNA(new Random(), 640)); //10 * 4^3
-		File[] inputReads = clusterDirs[c].listFiles();
-		for (int i = 0; i < inputReads.length; i++) {
-			if (!inputReads[i].getName().equals(file.getName())) {
-				sb.append(getString(inputReads[i]));
+		// prepend with random data
+		sb.append(ReadGenerator.randomDNA(new Random(), 640)); // 10 * 4^3
+		for (Read s : readClusters.get(c)) {
+			if (!s.readString.equals(read)) {
+				sb.append(s);
 			}
 		}
 		// calculate compression size without file
@@ -141,7 +201,7 @@ public class CompressionSort {
 		compresser.finish();
 		int bytesWithoutFile = compresser.deflate(new byte[b.length]);
 		// now with the file
-		sb.append(getString(file));
+		sb.append(read);
 		b = sb.toString().getBytes();
 		compresser = new Deflater();
 		compresser.setInput(b);
@@ -150,7 +210,6 @@ public class CompressionSort {
 	}
 
 	private String getString(File file) {
-
 		Scanner sc = null;
 		try {
 			sc = new Scanner(file);
@@ -165,26 +224,6 @@ public class CompressionSort {
 		sc.close();
 		return sb.toString();
 
-	}
-
-	/**
-	 * Move file to ith cluster.
-	 * 
-	 * @param file
-	 * @param i
-	 */
-	private boolean moveToCluster(File file, int i) {
-		boolean wasMoved = false;
-		File newPath = new File(clusterDirs[i].getPath() + "/" + file.getName());
-		if (!newPath.getPath().equals(file.getPath())) { // only move clusters
-															// if needed
-			file.renameTo(newPath);
-			wasMoved = true;
-		}
-		boolean correctCluster = Integer
-				.parseInt(file.getName().charAt(4) + "") == i;
-		System.out.printf("\t%d,%s,%d\n", i, file.getName(), correctCluster==true?1:0);
-		return wasMoved;
 	}
 
 	/**
