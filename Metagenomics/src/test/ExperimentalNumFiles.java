@@ -8,7 +8,7 @@ import metagenomics.ReadGenerator;
 public class ExperimentalNumFiles {
 
 	/**
-	 * Tests, varying numFiles 2^9 to 2^15
+	 * Tests, varying numFiles 2^8 to 2^15
 	 * ReadLength is kept constant at 2000
 	 * @param args
 	 */
@@ -19,7 +19,7 @@ public class ExperimentalNumFiles {
 				(new ReadGenerator("expreads", "expr", new File[] {
 						new File("Genomes/Acidilobus-saccharovorans.fasta"),
 						new File("Genomes/Caldisphaera-lagunensis.fasta") }))
-						.readGenerator((int)Math.pow(2, 9+factor), 2000);
+						.readGenerator((int)Math.pow(2, 8+factor), 2000);
 				long timeStart = System.currentTimeMillis();
 				CompressionSort cs = new CompressionSort("expreads", "expcluster",
 						2);
