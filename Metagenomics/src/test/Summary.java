@@ -42,6 +42,9 @@ public class Summary {
 						System.out.println(Arrays.toString(counts));
 					}
 				}
+				else if (line.charAt(0) == 'D') {
+					System.out.println(line);
+				}
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

@@ -10,6 +10,7 @@
 [6, 16, 0, 10]
 ----BEGINNING ITERATION 4----
 [16, 16, 0, 0]
+Done compression sort, took 5972 ms.
 [16, 16]
 ----BEGINNING ITERATION 0----
 [6, 10, 6, 10]
@@ -21,6 +22,7 @@
 [6, 3, 13, 10]
 ----BEGINNING ITERATION 2----
 [0, 8, 8, 16]
+Done compression sort, took 6146 ms.
 [32, 32]
 ----BEGINNING ITERATION 0----
 [13, 19, 13, 19]
@@ -32,6 +34,7 @@
 [13, 2, 30, 19]
 ----BEGINNING ITERATION 4----
 [13, 24, 8, 19]
+Done compression sort, took 86838 ms.
 [32, 32]
 ----BEGINNING ITERATION 0----
 [14, 18, 14, 18]
@@ -43,6 +46,7 @@
 [19, 0, 32, 13]
 ----BEGINNING ITERATION 4----
 [9, 15, 17, 23]
+Done compression sort, took 70936 ms.
 [32, 32]
 ----BEGINNING ITERATION 0----
 [16, 16, 16, 16]
@@ -54,6 +58,7 @@
 [11, 23, 9, 21]
 ----BEGINNING ITERATION 4----
 [28, 32, 0, 4]
+Done compression sort, took 21805 ms.
 [64, 64]
 ----BEGINNING ITERATION 0----
 [31, 33, 31, 33]
@@ -65,6 +70,7 @@
 [53, 62, 2, 11]
 ----BEGINNING ITERATION 4----
 [53, 50, 14, 11]
+Done compression sort, took 2927557 ms.
 [64, 64]
 ----BEGINNING ITERATION 0----
 [28, 36, 28, 36]
@@ -76,6 +82,7 @@
 [34, 23, 41, 30]
 ----BEGINNING ITERATION 4----
 [37, 54, 10, 27]
+Done compression sort, took 5184366 ms.
 [64, 64]
 ----BEGINNING ITERATION 0----
 [33, 31, 33, 31]
@@ -87,6 +94,7 @@
 [25, 6, 58, 39]
 ----BEGINNING ITERATION 4----
 [17, 3, 61, 47]
+Done compression sort, took 273230 ms.
 [128, 128]
 ----BEGINNING ITERATION 0----
 [61, 67, 61, 67]
@@ -98,6 +106,7 @@
 [69, 73, 55, 59]
 ----BEGINNING ITERATION 4----
 [100, 90, 38, 28]
+Done compression sort, took 22470803 ms.
 [128, 128]
 ----BEGINNING ITERATION 0----
 [64, 64, 64, 64]
@@ -109,6 +118,7 @@
 [45, 14, 114, 83]
 ----BEGINNING ITERATION 4----
 [81, 97, 31, 47]
+Done compression sort, took 22515645 ms.
 [128, 128]
 ----BEGINNING ITERATION 0----
 [71, 57, 71, 57]
@@ -120,6 +130,7 @@
 [53, 9, 119, 75]
 ----BEGINNING ITERATION 4----
 [69, 92, 36, 59]
+Done compression sort, took 15419188 ms.
 [256, 256]
 ----BEGINNING ITERATION 0----
 [140, 116, 140, 116]
@@ -131,6 +142,7 @@
 [147, 122, 134, 109]
 ----BEGINNING ITERATION 4----
 [118, 41, 215, 138]
+Done compression sort, took 4323489 ms.
 [256, 256]
 ----BEGINNING ITERATION 0----
 [120, 136, 120, 136]
@@ -142,6 +154,7 @@
 [172, 119, 137, 84]
 ----BEGINNING ITERATION 4----
 [172, 168, 88, 84]
+Done compression sort, took 60670357 ms.
 [256, 256]
 ----BEGINNING ITERATION 0----
 [124, 132, 124, 132]
@@ -153,3 +166,4 @@
 [136, 224, 32, 120]
 ----BEGINNING ITERATION 4----
 [147, 141, 115, 109]
+Done compression sort, took 31287995 ms.
