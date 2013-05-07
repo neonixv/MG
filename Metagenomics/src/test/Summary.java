@@ -8,6 +8,8 @@ import java.util.Scanner;
 public class Summary {
 
 	public static void main(String[] args) {
+		if(args.length == 0)
+			System.err.println("usage: Summary filename iter");
 		try {
 			Scanner in = new Scanner(new File(args[0]));
 			int iter = Integer.parseInt(args[1]);
