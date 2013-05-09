@@ -105,7 +105,7 @@ public class CompressionSort {
 			roundRobin = (roundRobin + 1 == readClusters.size()) ? 0
 					: roundRobin + 1;
 			boolean correctCluster = Integer.parseInt(inputReads[i].getName()
-					.charAt(4) + "") == roundRobin;
+					.charAt(5) + "") == roundRobin;
 			System.out.printf("\t%d,%s,%d\n", roundRobin,
 					inputReads[i].getName(), (correctCluster) ? 1 : 0);
 		}
@@ -177,7 +177,7 @@ public class CompressionSort {
 			}
 			newClusters.get(newCluster).add(s);
 			boolean correctCluster = Integer
-					.parseInt(s.fileName.charAt(4) + "") == newCluster;
+					.parseInt(s.fileName.charAt(5) + "") == newCluster;
 			System.out.printf("\t%d,%s,%d\n", newCluster, s.fileName,
 					(correctCluster) ? 1 : 0);
 		}
