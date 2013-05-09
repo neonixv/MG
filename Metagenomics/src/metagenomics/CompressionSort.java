@@ -61,30 +61,24 @@ public class CompressionSort {
 		}
 	}
 
-	File inputDir;
-	File outputDir;
-	int totalFiles;
-	final double CLUSTERDIFFTHRESHOLD = 0.1;
-	ArrayList<ArrayList<Read>> readClusters;
+	private File inputDir;
+	private int totalFiles;
+	private final double CLUSTERDIFFTHRESHOLD = 0.1;
+	private static boolean PREPEND_RANDOM_DNA;
+	private ArrayList<ArrayList<Read>> readClusters;
 
 	/**
+	 * @param random true if random dna is to be prepended before compression.
 	 * @param inputDirName
-	 * @param outputDirName
 	 * @param nClusters
 	 */
-	public CompressionSort(String inputDirName, String outputDirName,
-			int nClusters) {
+	public CompressionSort(boolean random, String inputDirName, int nClusters) {
 		readClusters = new ArrayList<ArrayList<Read>>(nClusters);
+		PREPEND_RANDOM_DNA = random;
 		this.inputDir = new File(inputDirName);
 		if (!inputDir.exists()) {
 			System.err.println("Cannot find input directory " + inputDirName);
 		}
-		this.outputDir = new File(outputDirName);
-		if (outputDir.exists()) {
-			recursiveDelete(outputDir);
-			outputDir.delete();
-		}
-		outputDir.mkdir();
 		init();
 	}
 
@@ -110,10 +104,10 @@ public class CompressionSort {
 							inputReads[i].getName()));
 			roundRobin = (roundRobin + 1 == readClusters.size()) ? 0
 					: roundRobin + 1;
-			boolean correctCluster = Integer
-					.parseInt(inputReads[i].getName().charAt(4) + "") == roundRobin;
-			System.out.printf("\t%d,%s,%d\n", roundRobin, inputReads[i].getName(),
-					(correctCluster) ? 1 : 0);
+			boolean correctCluster = Integer.parseInt(inputReads[i].getName()
+					.charAt(4) + "") == roundRobin;
+			System.out.printf("\t%d,%s,%d\n", roundRobin,
+					inputReads[i].getName(), (correctCluster) ? 1 : 0);
 		}
 	}
 
@@ -156,10 +150,10 @@ public class CompressionSort {
 						minDist = compressDist;
 						belongingToCluster = i;
 					}
-//					System.out
-//							.printf("compressDist: %d \t minDist: %d \t cluster: %d \t belongingtoCluster: %d\n",
-//									compressDist, minDist, i,
-//									belongingToCluster);
+					// System.out
+					// .printf("compressDist: %d \t minDist: %d \t cluster: %d \t belongingtoCluster: %d\n",
+					// compressDist, minDist, i,
+					// belongingToCluster);
 				}
 				clusterMap.put(read, belongingToCluster);
 
@@ -172,7 +166,7 @@ public class CompressionSort {
 		for (int i = 0; i < readClusters.size(); i++) {
 			newClusters.add(new ArrayList<Read>());
 		}
-		
+
 		int moveCounter = 0;
 		for (Read s : clusterMap.keySet()) {
 			int newCluster = clusterMap.get(s);
@@ -187,9 +181,10 @@ public class CompressionSort {
 			System.out.printf("\t%d,%s,%d\n", newCluster, s.fileName,
 					(correctCluster) ? 1 : 0);
 		}
-		//replace old read clusters
+		// replace old read clusters
 		readClusters = newClusters;
-		System.err.printf("Moved %d reads to different cluster.\n", moveCounter);
+		System.err
+				.printf("Moved %d reads to different cluster.\n", moveCounter);
 		return wasMoved;
 
 	}
@@ -197,7 +192,8 @@ public class CompressionSort {
 	private int getCompressDist(String read, int c) {
 		StringBuilder sb = new StringBuilder();
 		// prepend with random data
-		sb.append(ReadGenerator.randomDNA(new Random(), 640)); // 10 * 4^3
+		if (PREPEND_RANDOM_DNA)
+			sb.append(ReadGenerator.randomDNA(new Random(), 640)); // 10 * 4^3
 		for (Read s : readClusters.get(c)) {
 			if (!s.readString.equals(read)) {
 				sb.append(s.readString);
@@ -215,7 +211,10 @@ public class CompressionSort {
 		compresser = new Deflater();
 		compresser.setInput(b);
 		compresser.finish();
-		return compresser.deflate(new byte[b.length]) - bytesWithoutFile;
+		int compressionDistance = compresser.deflate(new byte[b.length])
+				- bytesWithoutFile;
+		// System.err.printf("CompressionDistance:\t%d\n", compressionDistance);
+		return compressionDistance;
 	}
 
 	private String getString(File file) {
@@ -239,19 +238,34 @@ public class CompressionSort {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if (args.length != 3) {
-			System.err
-					.println("Usage: CompressionSort inputDir outputDir nClusters");
+		boolean isRandom = false;
+		String inputDir = null;
+		int nClusters = 0;
+		if (args.length < 2) {
+			System.err.println("Usage: CompressionSort <flags> inputDir nClusters");
 			System.exit(0);
 		}
+		
+		for (int i = 0; i < args.length; i++){
+			if(args[i].charAt(0)=='-'){
+				switch(args[i].charAt(1)){
+				case 'r':
+					isRandom = true;
+					i++;
+					break;
+				}
+			}
+			inputDir = args[i++];
+			nClusters = Integer.parseInt(args[i++]);
+		}
+		
 		for (int i = 0; i < 5; i++) {
 			(new ReadGenerator("temp", "read", new File[] {
 					new File("Genomes/Acidilobus-saccharovorans.fasta"),
 					new File("Genomes/Caldisphaera-lagunensis.fasta") }))
 					.readGenerator(40, 1024);
 			long timeStart = System.currentTimeMillis();
-			CompressionSort cs = new CompressionSort(args[0], args[1],
-					Integer.parseInt(args[2]));
+			CompressionSort cs = new CompressionSort(isRandom, inputDir, nClusters);
 			cs.sort();
 			System.out.println("Done compression sort, took "
 					+ (System.currentTimeMillis() - timeStart) + " ms.");
