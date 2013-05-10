@@ -37,9 +37,9 @@ public class ReadGenerator {
 		return sequence.substring(startPos, startPos + readLength);
 	}
 
-	public void readGenerator(int numFiles, int readLength) {
-		System.out.printf("Running with %d numfiles, with %d long reads. \n", numFiles, readLength);
-		int[] numRuns = getNumRuns(numFiles);
+	public void readGenerator(int numReads, int readLength) {
+		System.out.printf("Running with %d numfiles, with %d long reads. \n", numReads, readLength);
+		int[] numRuns = getNumRuns(numReads);
 		int ithOutput = 0;
 		for (int i = 0; i < inputFiles.length; i++) {
 			Scanner sc = null;

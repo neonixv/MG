@@ -5,7 +5,12 @@ import java.io.File;
 import metagenomics.CompressionSort;
 import metagenomics.ReadGenerator;
 
-public class ExperimentalNumFiles {
+public class ExperimentalNumReads {
+
+	private static final int lowerBound = 8;
+	private static final int powerRange = 6;
+	private static final int readLength = 2000;
+	private static final boolean isRandom = true;
 
 	/**
 	 * Tests, varying numFiles 2^8 to 2^15
@@ -13,16 +18,15 @@ public class ExperimentalNumFiles {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("randomDNA prepended, using heap instead of files, varying numFiles 2^9 to 2^15");
-		for (int factor = 0; factor < 6; factor++) {
+		System.out.println("randomDNA prepended, using heap instead of files, varying numReads 2^9 to 2^15");
+		for (int factor = 0; factor < powerRange; factor++) {
 			for (int i = 0; i < 3; i++) {
-				(new ReadGenerator("expreads", "expr", new File[] {
+				(new ReadGenerator("dataNR", "expNR", new File[] {
 						new File("Genomes/Acidilobus-saccharovorans.fasta"),
 						new File("Genomes/Caldisphaera-lagunensis.fasta") }))
-						.readGenerator((int)Math.pow(2, 8+factor), 2000);
+						.readGenerator((int)Math.pow(2, lowerBound+factor), readLength);
 				long timeStart = System.currentTimeMillis();
-				CompressionSort cs = new CompressionSort("expreads", "expcluster",
-						2);
+				CompressionSort cs = new CompressionSort(isRandom, "dataNR", 2);
 				cs.sort();
 				System.out.println("Done compression sort, took "
 						+ (System.currentTimeMillis() - timeStart) + " ms.");
