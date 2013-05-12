@@ -26,6 +26,9 @@ public class CompressionSort {
 	 */
 	public CompressionSort(boolean random, String inputDirName, int nClusters) {
 		readClusters = new ArrayList<ArrayList<Read>>(nClusters);
+		for(int i = 0; i < nClusters; i++){
+			readClusters.add(new ArrayList<Read>());
+		}
 		PREPEND_RANDOM_DNA = random;
 		this.inputDir = new File(inputDirName);
 		if (!inputDir.exists()) {
@@ -42,9 +45,6 @@ public class CompressionSort {
 	}
 
 	private void init() {
-		// two clusters
-		readClusters.add(new ArrayList<Read>());
-		readClusters.add(new ArrayList<Read>());
 		File[] inputReads = inputDir.listFiles();
 		totalFiles = inputReads.length;
 		// shuffle array first
@@ -169,7 +169,7 @@ public class CompressionSort {
 		return compressionDistance;
 	}
 
-	private String getString(File file) {
+	public static String getString(File file) {
 		Scanner sc = null;
 		try {
 			sc = new Scanner(file);
