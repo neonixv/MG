@@ -13,54 +13,6 @@ import java.util.zip.Deflater;
 
 public class CompressionSort {
 
-	public class Read {
-		String readString;
-		int cluster;
-		String fileName;
-
-		public Read(String s, int c, String f) {
-			this.readString = s;
-			this.cluster = c;
-			this.fileName = f;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result + cluster;
-			result = prime * result
-					+ ((readString == null) ? 0 : readString.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Read other = (Read) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			// if (cluster != other.cluster)
-			// return false;
-			if (readString == null) {
-				if (other.readString != null)
-					return false;
-			} else if (!readString.equals(other.readString))
-				return false;
-			return true;
-		}
-
-		private CompressionSort getOuterType() {
-			return CompressionSort.this;
-		}
-	}
-
 	private File inputDir;
 	private int totalFiles;
 	private final double CLUSTERDIFFTHRESHOLD = 0.1;
