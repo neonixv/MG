@@ -1,10 +1,25 @@
 package metagenomics;
 
 public class Read {
-	String readString;
 
-	int cluster;
-	String fileName;
+	protected final String fileName;
+	protected int cluster;
+	protected final String readString;
+	public int getCluster() {
+		return cluster;
+	}
+
+	public void setCluster(int cluster) {
+		this.cluster = cluster;
+	}
+
+	public String getReadString() {
+		return readString;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
 
 	public Read(String s, int c, String f) {
 		this.readString = s;

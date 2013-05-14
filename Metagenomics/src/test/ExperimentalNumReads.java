@@ -1,6 +1,7 @@
 package test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import metagenomics.CompressionSort;
 import metagenomics.ReadGenerator;
@@ -26,8 +27,14 @@ public class ExperimentalNumReads {
 						new File("Genomes/Caldisphaera-lagunensis.fasta") }))
 						.readGenerator((int)Math.pow(2, lowerBound+factor), readLength);
 				long timeStart = System.currentTimeMillis();
-				CompressionSort cs = new CompressionSort(isRandom, "dataNR", 2);
-				cs.sort();
+				CompressionSort cs;
+				try {
+					cs = new CompressionSort(isRandom, "dataNR", 2);
+					cs.sort();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				System.out.println("Done compression sort, took "
 						+ (System.currentTimeMillis() - timeStart) + " ms.");
 			}

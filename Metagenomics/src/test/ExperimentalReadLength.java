@@ -1,6 +1,7 @@
 package test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import metagenomics.CompressionSort;
 import metagenomics.ReadGenerator;
@@ -30,9 +31,16 @@ public class ExperimentalReadLength {
 						.readGenerator(numReads,
 								(int) Math.pow(2, lowerBound + factor));
 				long timeStart = System.currentTimeMillis();
-				CompressionSort cs = new CompressionSort(isRandom, "dataRL",
-						2);
-				cs.sort();
+				CompressionSort cs;
+				try {
+					cs = new CompressionSort(isRandom, "dataRL",
+							2);
+
+					cs.sort();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				System.out.println("Done compression sort, took "
 						+ (System.currentTimeMillis() - timeStart) + " ms.");
 			}
