@@ -23,8 +23,9 @@ public class CompressionSort {
 	 * @param random true if random dna is to be prepended before compression.
 	 * @param inputDirName
 	 * @param nClusters
+	 * @throws FileNotFoundException 
 	 */
-	public CompressionSort(boolean random, String inputDirName, int nClusters) {
+	public CompressionSort(boolean random, String inputDirName, int nClusters) throws FileNotFoundException {
 		readClusters = new ArrayList<ArrayList<Read>>(nClusters);
 		for(int i = 0; i < nClusters; i++){
 			readClusters.add(new ArrayList<Read>());
@@ -32,7 +33,7 @@ public class CompressionSort {
 		PREPEND_RANDOM_DNA = random;
 		this.inputDir = new File(inputDirName);
 		if (!inputDir.exists()) {
-			System.err.println("Cannot find input directory " + inputDirName);
+			throw new FileNotFoundException("Cannot find input directory: " + inputDirName);
 		}
 		init();
 	}
@@ -217,8 +218,14 @@ public class CompressionSort {
 					new File("Genomes/Caldisphaera-lagunensis.fasta") }))
 					.readGenerator(40, 1024);
 			long timeStart = System.currentTimeMillis();
-			CompressionSort cs = new CompressionSort(isRandom, inputDir, nClusters);
-			cs.sort();
+			CompressionSort cs;
+			try {
+				cs = new CompressionSort(isRandom, inputDir, nClusters);
+				cs.sort();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("Done compression sort, took "
 					+ (System.currentTimeMillis() - timeStart) + " ms.");
 		}
