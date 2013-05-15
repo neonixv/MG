@@ -120,7 +120,6 @@ public class BigramCountSort {
 	}
 	
 	/**
-	 * TODO should somehow return total count as well. Perhaps as a GramCount object?
 	 * @param s
 	 * @param length
 	 * @return null if length of s is less than gramlength.
@@ -130,14 +129,16 @@ public class BigramCountSort {
 			return null;
 		//all strings are treated as upper case.
 		s = s.toUpperCase();
-		Map<String, Integer> counts = new HashMap<String, Integer>();
-		for(int i = 0; i < s.length() - length + 1; i++){
-			String bigram = s.substring(i, i+length);
-			if(!counts.containsKey(bigram))
-				counts.put(bigram, 0);
-			counts.put(bigram, counts.get(bigram)+1);
+		Map<String, Integer> countMap = new HashMap<String, Integer>();
+		int count;
+		for(count = 0; count < s.length() - length + 1; count++){
+			String bigram = s.substring(count, count+length);
+			if(!countMap.containsKey(bigram))
+				countMap.put(bigram, 0);
+			countMap.put(bigram, countMap.get(bigram)+1);
 		}
-		return counts;
+		countMap.put("total", count);
+		return countMap;
 	}
 
 
@@ -173,14 +174,14 @@ public class BigramCountSort {
 		}
 		
 		for (int i = 0; i < 5; i++) {
-			(new ReadGenerator("tempBP", "reads", new File[] {
+			(new ReadGenerator(inputDir, "reads", new File[] {
 					new File("Genomes/Acidilobus-saccharovorans.fasta"),
 					new File("Genomes/Caldisphaera-lagunensis.fasta") }))
 					.readGenerator(40, 1024);
 			long timeStart = System.currentTimeMillis();
 			BigramCountSort bcs;
 			try {
-				bcs = new BigramCountSort("temp", nClusters, iterThreshold);
+				bcs = new BigramCountSort(inputDir, nClusters, iterThreshold);
 				bcs.sort();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
