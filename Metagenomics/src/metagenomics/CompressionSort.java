@@ -64,7 +64,7 @@ public class CompressionSort {
 			roundRobin = (roundRobin + 1 == readClusters.size()) ? 0
 					: roundRobin + 1;
 			boolean correctCluster = Integer.parseInt(inputReads[i].getName()
-					.charAt(4) + "") == roundRobin;
+					.charAt(5) + "") == roundRobin;
 			System.out.printf("\t%d,%s,%d\n", roundRobin,
 					inputReads[i].getName(), (correctCluster) ? 1 : 0);
 		}
@@ -87,7 +87,7 @@ public class CompressionSort {
 								fileDiff, totalFiles);
 				return;
 			}
-			if (i > 250)
+			if (i > iter_threshold)
 				return;
 		} while (compressSort());
 	}
@@ -136,14 +136,14 @@ public class CompressionSort {
 			}
 			newClusters.get(newCluster).add(s);
 			boolean correctCluster = Integer
-					.parseInt(s.fileName.charAt(4) + "") == newCluster;
+					.parseInt(s.fileName.charAt(5) + "") == newCluster;
 			System.out.printf("\t%d,%s,%d\n", newCluster, s.fileName,
 					(correctCluster) ? 1 : 0);
 		}
 		// replace old read clusters
 		readClusters = newClusters;
-		System.err
-				.printf("Moved %d reads to different cluster.\n", moveCounter);
+		System.out
+				.printf("----Moved %d reads to different cluster.\n----", moveCounter);
 		return wasMoved;
 
 	}
@@ -224,7 +224,7 @@ public class CompressionSort {
 		}
 		
 		for (int i = 0; i < 5; i++) {
-			(new ReadGenerator("tempBP", "reads", new File[] {
+			(new ReadGenerator(inputDir, "reads", new File[] {
 					new File("Genomes/Acidilobus-saccharovorans.fasta"),
 					new File("Genomes/Caldisphaera-lagunensis.fasta") }))
 					.readGenerator(40, 1024);
