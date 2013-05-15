@@ -29,7 +29,7 @@ public class ExperimentalNumReads {
 				long timeStart = System.currentTimeMillis();
 				CompressionSort cs;
 				try {
-					cs = new CompressionSort(isRandom, "dataNR", 2);
+					cs = new CompressionSort(isRandom, "dataNR", 2, 250);
 					cs.sort();
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block

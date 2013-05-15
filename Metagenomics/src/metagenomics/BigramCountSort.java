@@ -16,8 +16,8 @@ public class BigramCountSort {
 
 	private final File inputDir;
 	private final int totalFiles;
-	private final int iterations;
-	private final double CLUSTERDIFFTHRESHOLD = 0.1;
+	private final int iter_threshold;
+	private final double clusterDiff_threshold = 0.1;
 	private final int GRAMLENGTH = 2;
 	private ArrayList<ArrayList<Read>> readClusters;
 	
@@ -30,9 +30,9 @@ public class BigramCountSort {
 	public BigramCountSort(String inputDirName, int nClusters, int iter) throws FileNotFoundException {
 		readClusters = new ArrayList<ArrayList<Read>>(nClusters);
 		if(iter >= 0)
-			iterations = iter;
+			iter_threshold = iter;
 		else
-			iterations = 250;
+			iter_threshold = 250;
 		for(int i = 0; i < nClusters; i++){
 			readClusters.add(new ArrayList<Read>());
 		}
@@ -56,13 +56,13 @@ public class BigramCountSort {
 					readClusters.get(1).size() };
 			double fileDiff = Math.min((double) lengths[0] / lengths[1],
 					(double) lengths[1] / lengths[0]);
-			if (fileDiff < CLUSTERDIFFTHRESHOLD) {
+			if (fileDiff < clusterDiff_threshold) {
 				System.out
 						.printf("Relative cluster size max exceeded. fileDiff %f totalFiles %d\n",
 								fileDiff, totalFiles);
 				return;
 			}
-			if (i > iterations)
+			if (i > iter_threshold)
 				return;
 		} while (bigramCountSort());
 	}
@@ -173,7 +173,7 @@ public class BigramCountSort {
 		}
 		
 		for (int i = 0; i < 5; i++) {
-			(new ReadGenerator("temp", "read", new File[] {
+			(new ReadGenerator("tempBP", "reads", new File[] {
 					new File("Genomes/Acidilobus-saccharovorans.fasta"),
 					new File("Genomes/Caldisphaera-lagunensis.fasta") }))
 					.readGenerator(40, 1024);

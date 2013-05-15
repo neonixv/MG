@@ -34,7 +34,7 @@ public class ExperimentalReadLength {
 				CompressionSort cs;
 				try {
 					cs = new CompressionSort(isRandom, "dataRL",
-							2);
+							2, 250);
 
 					cs.sort();
 				} catch (FileNotFoundException e) {

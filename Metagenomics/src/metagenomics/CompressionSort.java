@@ -15,7 +15,8 @@ public class CompressionSort {
 
 	private File inputDir;
 	private int totalFiles;
-	private final double CLUSTERDIFFTHRESHOLD = 0.1;
+	private final int iter_threshold;
+	private final double clusterDiff_threshold = 0.1;
 	private static boolean PREPEND_RANDOM_DNA;
 	private ArrayList<ArrayList<Read>> readClusters;
 
@@ -23,9 +24,14 @@ public class CompressionSort {
 	 * @param random true if random dna is to be prepended before compression.
 	 * @param inputDirName
 	 * @param nClusters
+	 * @param iter TODO
 	 * @throws FileNotFoundException 
 	 */
-	public CompressionSort(boolean random, String inputDirName, int nClusters) throws FileNotFoundException {
+	public CompressionSort(boolean random, String inputDirName, int nClusters, int iter) throws FileNotFoundException {
+		if(iter >= 0)
+			iter_threshold = iter;
+		else
+			iter_threshold = 250;
 		readClusters = new ArrayList<ArrayList<Read>>(nClusters);
 		for(int i = 0; i < nClusters; i++){
 			readClusters.add(new ArrayList<Read>());
@@ -58,7 +64,7 @@ public class CompressionSort {
 			roundRobin = (roundRobin + 1 == readClusters.size()) ? 0
 					: roundRobin + 1;
 			boolean correctCluster = Integer.parseInt(inputReads[i].getName()
-					.charAt(5) + "") == roundRobin;
+					.charAt(4) + "") == roundRobin;
 			System.out.printf("\t%d,%s,%d\n", roundRobin,
 					inputReads[i].getName(), (correctCluster) ? 1 : 0);
 		}
@@ -75,7 +81,7 @@ public class CompressionSort {
 					readClusters.get(1).size() };
 			double fileDiff = Math.min((double) lengths[0] / lengths[1],
 					(double) lengths[1] / lengths[0]);
-			if (fileDiff < CLUSTERDIFFTHRESHOLD) {
+			if (fileDiff < clusterDiff_threshold) {
 				System.out
 						.printf("Relative cluster size max exceeded. fileDiff %f totalFiles %d\n",
 								fileDiff, totalFiles);
@@ -130,7 +136,7 @@ public class CompressionSort {
 			}
 			newClusters.get(newCluster).add(s);
 			boolean correctCluster = Integer
-					.parseInt(s.fileName.charAt(5) + "") == newCluster;
+					.parseInt(s.fileName.charAt(4) + "") == newCluster;
 			System.out.printf("\t%d,%s,%d\n", newCluster, s.fileName,
 					(correctCluster) ? 1 : 0);
 		}
@@ -194,6 +200,7 @@ public class CompressionSort {
 		boolean isRandom = false;
 		String inputDir = null;
 		int nClusters = 0;
+		int iterThreshold = 0;
 		if (args.length < 2) {
 			System.err.println("Usage: CompressionSort <flags> inputDir nClusters");
 			System.exit(0);
@@ -206,6 +213,10 @@ public class CompressionSort {
 					isRandom = true;
 					i++;
 					break;
+				case 'i':
+					iterThreshold = Integer.parseInt(args[++i]);
+					i++;
+					break;
 				}
 			}
 			inputDir = args[i++];
@@ -213,14 +224,14 @@ public class CompressionSort {
 		}
 		
 		for (int i = 0; i < 5; i++) {
-			(new ReadGenerator("temp", "read", new File[] {
+			(new ReadGenerator("tempBP", "reads", new File[] {
 					new File("Genomes/Acidilobus-saccharovorans.fasta"),
 					new File("Genomes/Caldisphaera-lagunensis.fasta") }))
 					.readGenerator(40, 1024);
 			long timeStart = System.currentTimeMillis();
 			CompressionSort cs;
 			try {
-				cs = new CompressionSort(isRandom, inputDir, nClusters);
+				cs = new CompressionSort(isRandom, inputDir, nClusters, iterThreshold);
 				cs.sort();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
