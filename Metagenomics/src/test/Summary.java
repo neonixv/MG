@@ -39,7 +39,8 @@ public class Summary {
 							}
 						} while (line.charAt(0) != '-' && in.hasNextLine());
 						System.out.println(line);
-						System.out.println(Arrays.toString(counts));
+//						System.out.println(Arrays.toString(counts));
+						System.out.printf("%.4f\n",fMeasure(counts));
 					}
 				}
 				else if (line.charAt(0) == 'D') {
@@ -51,6 +52,13 @@ public class Summary {
 			e.printStackTrace();
 		}
 
+	}
+
+	private static double fMeasure(int[] counts) {
+		double trueP = Math.max(counts[0], counts[1]);
+		double precision = trueP / (counts[0] + counts[1]);
+		double recall = trueP / (trueP + Math.min(counts[2], counts[3]));
+		return 2*(precision*recall)/(precision+recall);
 	}
 
 }
