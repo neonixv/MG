@@ -13,8 +13,10 @@ import java.util.zip.Deflater;
 
 public class CompressionSort {
 
+	private static final double moveGrowth_threshold = 0.3;
 	private File inputDir;
 	private int totalFiles;
+	private static int previousMoves = -1;
 	private final int iter_threshold;
 	private final double clusterDiff_threshold = 0.1;
 	private static boolean PREPEND_RANDOM_DNA;
@@ -149,6 +151,14 @@ public class CompressionSort {
 		}
 		//TODO: if moveCounter is some proportion x larger than previous,
 		// don't move! return and end program instead.
+		if(previousMoves < 0){
+			previousMoves = moveCounter;
+		}
+		if(moveCounter * moveGrowth_threshold > previousMoves){
+			System.out
+					.printf("----Early termination: move count %d \n----", moveCounter);
+			return false;
+		}
 		
 		// replace old read clusters
 		readClusters = newClusters;
