@@ -42,6 +42,7 @@ public class CompressionSort {
 			throw new FileNotFoundException("Cannot find input directory: " + inputDirName);
 		}
 		init();
+		recursiveDelete(inputDir);
 	}
 
 	public static void recursiveDelete(File dir) {
