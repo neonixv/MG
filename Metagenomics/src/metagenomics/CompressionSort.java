@@ -92,6 +92,12 @@ public class CompressionSort {
 		} while (compressSort());
 	}
 
+	/**
+	 * TODO: examine average compression distance
+	 * TODO: return true if another iteration is needed, eg. 
+	 * @return true if some files were moved.
+	 *
+	 */
 	private boolean compressSort() {
 		boolean wasMoved = false;
 		Map<Read, Integer> clusterMap = new HashMap<Read, Integer>();
@@ -140,6 +146,9 @@ public class CompressionSort {
 			System.out.printf("\t%d,%s,%d\n", newCluster, s.fileName,
 					(correctCluster) ? 1 : 0);
 		}
+		//TODO: if moveCounter is some proportion x larger than previous,
+		// don't move! return and end program instead.
+		
 		// replace old read clusters
 		readClusters = newClusters;
 		System.out

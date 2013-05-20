@@ -39,7 +39,7 @@ public class Summary {
 							}
 						} while (line.charAt(0) != '-' && in.hasNextLine());
 						System.out.println(line);
-//						System.out.println(Arrays.toString(counts));
+						System.out.println(Arrays.toString(counts));
 						System.out.printf("%.4f\n",fMeasure(counts));
 					}
 				}
