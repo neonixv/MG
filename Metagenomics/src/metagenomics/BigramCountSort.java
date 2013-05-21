@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * @author Nixie
- *
+ * 
  */
 public class BigramCountSort {
 
@@ -20,25 +20,26 @@ public class BigramCountSort {
 	private final double clusterDiff_threshold = 0.1;
 	private final int GRAMLENGTH = 2;
 	private ArrayList<ArrayList<Read>> readClusters;
-	
 
 	/**
 	 * @param inputDirName
 	 * @param nClusters
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
-	public BigramCountSort(String inputDirName, int nClusters, int iter) throws FileNotFoundException {
+	public BigramCountSort(String inputDirName, int nClusters, int iter)
+			throws FileNotFoundException {
 		readClusters = new ArrayList<ArrayList<Read>>(nClusters);
-		if(iter >= 0)
+		if (iter >= 0)
 			iter_threshold = iter;
 		else
 			iter_threshold = 250;
-		for(int i = 0; i < nClusters; i++){
+		for (int i = 0; i < nClusters; i++) {
 			readClusters.add(new ArrayList<Read>());
 		}
 		this.inputDir = new File(inputDirName);
 		if (!inputDir.exists()) {
-			throw new FileNotFoundException("Cannot find input directory: " + inputDirName);
+			throw new FileNotFoundException("Cannot find input directory: "
+					+ inputDirName);
 		}
 		File[] inputReads = inputDir.listFiles();
 		totalFiles = inputReads.length;
@@ -66,33 +67,48 @@ public class BigramCountSort {
 				return;
 		} while (bigramCountSort());
 	}
-	
+
 	private boolean bigramCountSort() {
-		//calculate gram counts in all clusters.
+		// calculate gram counts in all clusters.
 		Map[] clusterCounts = new Map[readClusters.size()];
-		for(int i = 0; i < readClusters.size(); i++){
+		for (int i = 0; i < readClusters.size(); i++) {
 			String s = concat(readClusters.get(i));
 			clusterCounts[i] = BigramCountSort.countGram(s, GRAMLENGTH);
 		}
-		
-		//go through each cluster and compare gram counts.
+
+		// go through each cluster and compare gram counts.
 
 		Map<Read, Integer> clusterMap = new HashMap<Read, Integer>();
-		for(ArrayList<Read> cluster: readClusters){
-			for(Read r: cluster){
-				Map counts = BigramCountSort.countGram(r.getReadString(), GRAMLENGTH);
-				Integer belongingToCluster = 0; //TODO change this
-				//determine similarity??
-				//reassign read to proper cluster
-				clusterMap.put(r, belongingToCluster );
+		for (ArrayList<Read> cluster : readClusters) {
+			for (Read r : cluster) {
+				Map<String, Integer> counts = BigramCountSort.countGram(
+						r.getReadString(), GRAMLENGTH);
+				double[] score = new double[clusterCounts.length];
+				for (String gram : counts.keySet()) {
+					if (!gram.equals("total")) {
+						for (int i = 0; i < clusterCounts.length; i++) {
+							int actualCount = (Integer) clusterCounts[i]
+									.get(gram) - counts.get(gram);
+							score[i] += (double) actualCount
+									/ ((Integer) clusterCounts[i].get("total"))
+									* counts.get(gram);
+
+						}
+					}
+				}
+				Integer belongingToCluster = (score[0] > score[1])? 0 : 1;
+				// determine similarity??
+				// reassign read to proper cluster
+				clusterMap.put(r, belongingToCluster);
 			}
 		}
+		//TODO stop condition
 		return false;
 	}
 
 	private String concat(ArrayList<Read> cluster) {
 		StringBuilder sb = new StringBuilder();
-		for(Read r : cluster){
+		for (Read r : cluster) {
 			sb.append(r.getReadString());
 		}
 		return sb.toString();
@@ -100,7 +116,8 @@ public class BigramCountSort {
 
 	/**
 	 * Load reads into memory
-	 * @param inputReads 
+	 * 
+	 * @param inputReads
 	 */
 	private void init(File[] inputReads) {
 		// shuffle array first
@@ -108,8 +125,8 @@ public class BigramCountSort {
 		int roundRobin = 0;
 		for (int i = 0; i < inputReads.length; i++) {
 			readClusters.get(roundRobin).add(
-					new Read(CompressionSort.getString(inputReads[i]), roundRobin,
-							inputReads[i].getName()));
+					new Read(CompressionSort.getString(inputReads[i]),
+							roundRobin, inputReads[i].getName()));
 			roundRobin = (roundRobin + 1 == readClusters.size()) ? 0
 					: roundRobin + 1;
 			boolean correctCluster = Integer.parseInt(inputReads[i].getName()
@@ -118,29 +135,28 @@ public class BigramCountSort {
 					inputReads[i].getName(), (correctCluster) ? 1 : 0);
 		}
 	}
-	
+
 	/**
 	 * @param s
 	 * @param length
 	 * @return null if length of s is less than gramlength.
 	 */
-	public static Map<String, Integer> countGram(String s, int length){
-		if(s == null || s.length() < length)
+	public static Map<String, Integer> countGram(String s, int length) {
+		if (s == null || s.length() < length)
 			return null;
-		//all strings are treated as upper case.
+		// all strings are treated as upper case.
 		s = s.toUpperCase();
 		Map<String, Integer> countMap = new HashMap<String, Integer>();
 		int count;
-		for(count = 0; count < s.length() - length + 1; count++){
-			String bigram = s.substring(count, count+length);
-			if(!countMap.containsKey(bigram))
+		for (count = 0; count < s.length() - length + 1; count++) {
+			String bigram = s.substring(count, count + length);
+			if (!countMap.containsKey(bigram))
 				countMap.put(bigram, 0);
-			countMap.put(bigram, countMap.get(bigram)+1);
+			countMap.put(bigram, countMap.get(bigram) + 1);
 		}
 		countMap.put("total", count);
 		return countMap;
 	}
-
 
 	/**
 	 * @param args
@@ -151,14 +167,15 @@ public class BigramCountSort {
 		String inputDir = null;
 		int nClusters = 0;
 		if (args.length < 2) {
-			System.err.println("Usage: BigramCountSort <flags> inputDir nClusters");
+			System.err
+					.println("Usage: BigramCountSort <flags> inputDir nClusters");
 			System.exit(0);
 		}
-		
-		//parse flags
-		for (int i = 0; i < args.length; i++){
-			if(args[i].charAt(0)=='-'){
-				switch(args[i].charAt(1)){
+
+		// parse flags
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].charAt(0) == '-') {
+				switch (args[i].charAt(1)) {
 				case 'r':
 					isRandom = true;
 					i++;
@@ -167,12 +184,12 @@ public class BigramCountSort {
 					iterThreshold = Integer.parseInt(args[++i]);
 					i++;
 					break;
-				}	
+				}
 			}
 			inputDir = args[i++];
 			nClusters = Integer.parseInt(args[i++]);
 		}
-		
+
 		for (int i = 0; i < 5; i++) {
 			(new ReadGenerator(inputDir, "reads", new File[] {
 					new File("Genomes/Acidilobus-saccharovorans.fasta"),
@@ -192,7 +209,5 @@ public class BigramCountSort {
 		}
 
 	}
-
-
 
 }
