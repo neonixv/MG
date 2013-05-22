@@ -22,7 +22,7 @@ public class Summary {
 					iterations = 0;
 				}
 				if(iterations > iter){
-					break;
+					continue;
 				}
 				else if (line.charAt(0) == '\t') {
 					line = line.trim();
