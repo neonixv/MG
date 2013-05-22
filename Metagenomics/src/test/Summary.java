@@ -15,9 +15,16 @@ public class Summary {
 			int iter = Integer.parseInt(args[1]);
 			System.out.println(Arrays.toString(args));
 			int[] counts = new int[4];
+			int iterations = 0;
 			while (in.hasNextLine()) {
 				String line = in.nextLine();
-				if (line.charAt(0) == '\t') {
+				if (line.charAt(0) == '['){
+					iterations = 0;
+				}
+				if(iterations > iter){
+					break;
+				}
+				else if (line.charAt(0) == '\t') {
 					line = line.trim();
 					if (line.charAt(0) == '0') {
 						if (line.charAt(line.length() - 1) == '0') {
@@ -35,11 +42,13 @@ public class Summary {
 				} else if (line.charAt(0) == '['
 						|| (line.length() > 5 && line.substring(0, 5).equals(
 								"----M"))) {
+//				"----B"))) {
 					// print and reset counts
 					if (counts[0] > 0) {
 						System.out.println(Arrays.toString(counts));
 						System.out.printf("%.4f\n", fMeasure(counts));
 						counts = new int[4];
+						iterations++;
 					}
 					System.out.println(line);
 				} else {
