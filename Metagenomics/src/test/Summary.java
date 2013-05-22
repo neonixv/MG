@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Summary {
 
 	public static void main(String[] args) {
-		if(args.length == 0)
+		if (args.length == 0)
 			System.err.println("usage: Summary filename iter");
 		try {
 			Scanner in = new Scanner(new File(args[0]));
@@ -19,6 +19,7 @@ public class Summary {
 				// beginning init
 				if (line.charAt(0) == '[') {
 					System.out.println(line);
+					iteration:
 					for (int i = 0; i < iter && in.hasNextLine(); i++) {
 						int[] counts = new int[4];
 						do {
@@ -36,14 +37,17 @@ public class Summary {
 								} else if (line.charAt(line.length() - 1) == '1') {
 									counts[3]++;
 								}
+							} else if (line.charAt(0) != '-'){
+								break iteration;
 							}
 						} while (line.charAt(0) != '-' && in.hasNextLine());
 						System.out.println(line);
 						System.out.println(Arrays.toString(counts));
-						System.out.printf("%.4f\n",fMeasure(counts));
+						System.out.printf("%.4f\n", fMeasure(counts));
+						if (i > 0)
+							System.out.println(in.nextLine());
 					}
-				}
-				else if (line.charAt(0) == 'D') {
+				} else if (line.charAt(0) == 'D' || line.charAt(0) == 'R') {
 					System.out.println(line);
 				}
 			}
@@ -58,7 +62,7 @@ public class Summary {
 		double trueP = Math.max(counts[0], counts[1]);
 		double precision = trueP / (counts[0] + counts[1]);
 		double recall = trueP / (trueP + Math.min(counts[2], counts[3]));
-		return 2*(precision*recall)/(precision+recall);
+		return 2 * (precision * recall) / (precision + recall);
 	}
 
 }
